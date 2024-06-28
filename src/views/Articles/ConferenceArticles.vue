@@ -1,5 +1,6 @@
 <template>
     <h1>Присланные статьи</h1>
+    <button class="addSubmission" @click="$router.push(`/create_submission`)">Добавить статью</button>
     <ArticlesTableTools/>
     <div class="big-table">
         <table>
@@ -127,5 +128,11 @@ td {
     /**Расширение таблицы*/
     width: 1%;
     white-space: nowrap;
+}
+
+.addSubmission {
+    width: 200px;
+    height: 40px;
+    text-align: center;
 }
 </style>

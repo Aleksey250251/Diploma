@@ -8,26 +8,94 @@
 </template>
 
 <script>
+    import axios from 'axios'
 export default {
     props:{
         login: String,
         password: String,
     },
     methods:{
-        loginTo(){
-            /*axios.get('/localhost:8000/getUser/login',
-            {
-                params: {
-                login: this.login,
-                password: this.password,
+        getCookie(name) {
+            let matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+        },
+        async fetchLogin() {
+            try {
+                const form = new FormData();
+                form.append('login', this.login)
+                form.append('password', this.password)
+                
+                let auth_str = this.getCookie('auth')
+                
+                if(auth_str == undefined) {
+                    
+                    auth_str = ''
+
+                    const response = await axios.post(
+                        'http://localhost:5152/api/users/login',
+                        form,
+                        {
+                            headers: {
+                                'Authorization': auth_str
+                            }
+                        }
+                    )
+                    if(response.status === 200)
+                        document.cookie = `auth=${response.data.id} ${response.data.hash};`
+
                 }
-            }).then{
-                userID = result
             }
-            */
-            var userID = 1
-            this.$store.commit('login',userID);
-            this.$router.push(`/profile/${userID}`);
+            catch(e) {
+                console.log('Error fetching Posts...', e.message)
+            }
+        },
+        async getData(auth_str) {
+            try {
+                const response = await axios.get('http://localhost:5152/api/users',
+                    {
+                        headers: {
+                            Authorization: auth_str
+                        }
+                    }
+                );
+                console.log(response);
+                return response
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        loginTo(){
+            this.fetchLogin()
+
+            let auth_str=this.getCookie('auth')
+            
+            let id = -1
+
+            if(auth_str == undefined) 
+                this.$router.push(`/auth`)
+            else {
+                debugger
+                let response = this.getData(auth_str)
+                response.then((response) => {
+                    debugger
+                    id = response.data.id
+                    console.log(id, response);
+
+                    if(id === -1) {
+                        debugger
+                        this.$router.push(`/`);
+                    }
+                    else {
+                        debugger
+                        this.$store.commit('login', id)
+                        this.$router.push(`/profile/${id}`);
+                    }
+                })
+                
+                
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="auth-box" v-if="$store.state.isAuth==true">
         <router-link to="/">
-            <a class = "auth-btn" href="#" @click="loginTo">Выйти</a>
+            <a class = "auth-btn" href="#" @click="logout">Выйти</a>
         </router-link>
         <router-link :to="{name: 'profile',params: {id:this.$store.getters.getCurrentUserID}}"><a class = "registr-btn" href="#">Профиль</a></router-link>
     </div>
@@ -14,7 +14,7 @@
 <script>
 export default {
     methods:{
-        loginTo(){
+        logout(){
             this.$store.commit('logout');
             $router.push('/about')
         }

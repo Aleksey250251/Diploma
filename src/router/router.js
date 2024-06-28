@@ -11,6 +11,7 @@ import Profile from "@/views/Profile.vue";
 import Registration from "@/views/RegAndAuth/Registration.vue";
 import Reviews from "@/views/Reviews.vue";
 import SingleArticle from "@/views/Articles/SingleArticle.vue";
+import CreateSubmission from "@/views/CreateSubmission.vue";
 //#endregion
 import PageNotFound from "@/views/PageNotFound.vue";
 
@@ -67,6 +68,11 @@ const routes = [
         name: 'reviews',
         component: Reviews,
     },
+    {
+        path:`/create_submission`,
+        name: 'create_submission',
+        component: CreateSubmission,
+    }
     /*
     { 
         path: '/404', 
